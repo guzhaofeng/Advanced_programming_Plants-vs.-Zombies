@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Advanced_programming_Plants_vs_Zombies",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Advanced_programming_Plants_vs_Zombies::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Advanced_programming_Plants_vs_Zombies-Debug-d2bef2a8a82b3ef7eabf.json",
+					"name" : "Advanced_programming_Plants_vs_Zombies",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/All_Homework/Project_Desgin/Advanced_programming_Plants vs. Zombies/Advanced_programming_Plants_vs_Zombies/cmake-build-debug",
+		"source" : "E:/All_Homework/Project_Desgin/Advanced_programming_Plants vs. Zombies/Advanced_programming_Plants_vs_Zombies"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}
