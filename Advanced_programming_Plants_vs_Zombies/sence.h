@@ -7,7 +7,9 @@ class sence {
 public:
     virtual void display() = 0;
     virtual Status progress(ExMessage& msg) = 0;
+    virtual ~sence() = 0;
 };
 
+sence::~sence() {}
 
 #endif //ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_SENCE_H

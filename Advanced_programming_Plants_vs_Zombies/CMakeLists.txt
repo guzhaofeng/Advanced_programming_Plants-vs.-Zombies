@@ -7,5 +7,11 @@ include_directories(./easyx/include)
 link_directories(./easyx/lib64)
 link_libraries(libeasyx.a)
 
-add_executable(Advanced_programming_Plants_vs_Zombies main.cpp
-        )
+add_executable(Advanced_programming_Plants_vs_Zombies main.cpp)
+
+
+target_link_libraries(Advanced_programming_Plants_vs_Zombies
+        easyx
+        winmm
+)
+

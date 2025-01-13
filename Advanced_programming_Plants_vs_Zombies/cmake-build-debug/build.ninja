@@ -66,7 +66,7 @@ build CMakeFiles/Advanced_programming_Plants_vs_Zombies.dir/main.cpp.obj: CXX_CO
 
 build Advanced_programming_Plants_vs_Zombies.exe: CXX_EXECUTABLE_LINKER__Advanced_programming_Plants_vs_Zombies_Debug CMakeFiles/Advanced_programming_Plants_vs_Zombies.dir/main.cpp.obj
   FLAGS = -g
-  LINK_LIBRARIES = -Wl,-Bstatic  -leasyx  -Wl,-Bdynamic  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = -Wl,-Bstatic  -leasyx  -Wl,-Bdynamic  -leasyx  -lwinmm  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -L"E:/All_Homework/Project_Desgin/Advanced_programming_Plants vs. Zombies/Advanced_programming_Plants_vs_Zombies/./easyx/lib64"
   OBJECT_DIR = CMakeFiles\Advanced_programming_Plants_vs_Zombies.dir
   POST_BUILD = cd .

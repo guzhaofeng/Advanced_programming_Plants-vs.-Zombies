@@ -15,6 +15,7 @@
 		[
 			"add_executable",
 			"link_directories",
+			"target_link_libraries",
 			"include_directories"
 		],
 		"files" : 
@@ -41,6 +42,12 @@
 			{
 				"command" : 2,
 				"file" : 0,
+				"line" : 13,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
 				"line" : 6,
 				"parent" : 0
 			}
@@ -58,7 +65,7 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "E:/All_Homework/Project_Desgin/Advanced_programming_Plants vs. Zombies/Advanced_programming_Plants_vs_Zombies/./easyx/include"
 				}
 			],
@@ -106,6 +113,16 @@
 			},
 			{
 				"fragment" : "-Wl,-Bdynamic",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-leasyx",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lwinmm",
 				"role" : "libraries"
 			},
 			{
