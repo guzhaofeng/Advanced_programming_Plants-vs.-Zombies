@@ -7,34 +7,62 @@
 class choose_game:public sence{
 private:
     IMAGE back_ground;
+
     int page = 1;
+
     button sunday_button;
     button sunwaterday_button;
 public:
-    choose_game(): sunday_button(10,100,424,261,1,
-        "","",
+    choose_game(): sunday_button(30,170,424,270,1,
+        "tabBlock","to 0",
         {"../resourse/choose_game/sunday.png","../resourse/choose_game/sunday1.png"},
         {}),
-        sunwaterday_button(10+450,100,417,263,1,
-        "","",
+
+        sunwaterday_button(10+450,169,417,263,1,
+        "tabBlock","to 0",
         {"../resourse/choose_game/sunwaterday.png","../resourse/choose_game/sunwaterday1.png"},
         {})
         {
 
+        mciSendString("open ../resourse/choose_game/gamingBgm4.mp3 alias choose_game_music", nullptr,0,nullptr);
+        mciSendString("play choose_game_music repeat",nullptr,0,nullptr);
+            //播放音乐
+        mciSendString("open ../resourse/choose_game/tabBlock.mp3 alias tabBlock", nullptr,0,nullptr);
         loadimage(&back_ground,"../resourse/choose_game/background.png");//加载背景
     }
 
     ~choose_game() override{
-
+        mciSendString("close choose_game_music",nullptr,0,nullptr);
     }
 
     void display() override{
+        BeginBatchDraw();
+        cleardevice();
+
         putimage(0,0,&back_ground);
+        sunday_button.display();
+        sunwaterday_button.display();
+
+        FlushBatchDraw();
     }
 
     Status progress(ExMessage &msg) override{
+        if(msg.message == WM_LBUTTONDOWN && sunday_button.can_touch(msg.x,msg.y)){
+            return change_to_sunday_game;
+        }else if(msg.message == WM_LBUTTONDOWN && sunwaterday_button.can_touch(msg.x,msg.y)){
+            return change_to_sunwaterday_game;
+        }
 
+        if(sunday_button.can_touch(msg.x,msg.y)){
+            sunday_button.progress(is_in_touch);
+        }else if(sunwaterday_button.can_touch(msg.x,msg.y)){
+            sunwaterday_button.progress(is_in_touch);
+        }
 
+        else{
+            sunday_button.progress(ing);
+            sunwaterday_button.progress(ing);
+        }
         return ing;
     }
 };

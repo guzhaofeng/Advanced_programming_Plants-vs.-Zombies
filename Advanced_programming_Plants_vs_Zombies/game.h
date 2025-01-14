@@ -1,0 +1,86 @@
+#include "all_header_file.h"
+#include "sence.h"
+#include "toolbar.h"
+#include "timer.h"
+#include "single_path.h"
+
+#ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_GAME_H
+#define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_GAME_H
+
+class game : public sence{
+private:
+    IMAGE back_ground;
+
+    Toolbar toolbar;
+    bool is_in_puting_a_card = false;
+    int mouse_x;
+    int mouse_y;
+
+    bool is_day_not_night;
+
+    int sun_num = 100;
+    vector<single_path> map;
+public:
+    game(const TCHAR* image_path,int path_num,const vector<bool>& is_land,bool is_day_not_night):toolbar(),is_day_not_night(is_day_not_night){
+        loadimage(&back_ground,image_path);//加载背景
+
+        for (int i = 0; i < path_num; ++i) {
+            map.emplace_back(i-(path_num/2)-1,is_day_not_night,is_land[i]);
+        }
+
+        mciSendString("open ../resourse/game/gamingBgm1.mp3 alias bgm1", nullptr,0,nullptr);
+        mciSendString("play bgm1 repeat", nullptr,0,nullptr);
+    }
+    ~game() override{
+        mciSendString("stop bgm1", nullptr,0,nullptr);
+    }
+
+    void display() override{
+        BeginBatchDraw();
+        cleardevice();
+
+        putimage(-140,0,&back_ground);
+
+        for(auto& single_path : map){
+            single_path.display();
+        }
+
+        if(is_in_puting_a_card){
+            toolbar.display(mouse_x,mouse_y);
+        }else{
+            toolbar.display();
+        }
+
+        FlushBatchDraw();
+    }
+
+    Status progress(ExMessage &msg) override{
+        mouse_x = msg.x;
+        mouse_y = msg.y;
+
+        if(toolbar.progress(msg) == touch_a_card){
+            is_in_puting_a_card = true;
+            return ing;
+        }else if(is_in_puting_a_card && msg.message == WM_LBUTTONDOWN){
+            int result = 0;
+            for (auto& temp : map) {
+                result = temp.can_touch(msg.x,msg.y);
+                if(result != 0){
+                    cout << "you have plant a plant" << endl;
+
+                    is_in_puting_a_card = false;
+
+                    temp.progress(result,toolbar.creat_new_plant(result));
+
+                    return ing;
+                }
+            }
+        }
+
+
+        return ing;
+    }
+};
+
+
+#endif //ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_GAME_H

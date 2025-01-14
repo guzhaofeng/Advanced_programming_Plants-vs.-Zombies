@@ -32,7 +32,7 @@ public:
             loadimage(&image,address_list[i]);
             image_list.push_back(image);
         }
-        for (int i = 0; i <= num_of_be_touch_list; ++i) {
+        for (int i = 0; i < back_ground_address_list.size(); ++i) {
             IMAGE image;
             loadimage(&image,back_ground_address_list[i]);
             back_ground.push_back(image);
@@ -59,7 +59,7 @@ public:
 
     void display(){
         if(is_in_loop){
-            if(back_ground.size()-1 >= is_in_loop){
+            if(!back_ground.empty()){
                 putimagewithTransparent(x,y,&image_list[is_in_loop],&back_ground[is_in_loop]);
             }else{
                 putimage(x,y,&image_list[is_in_loop]);
@@ -80,7 +80,7 @@ public:
             is_in_loop = (int)image_list.size()-1;
 
             if(can_play_button_music){
-                mciSendString(seek_music,0,0,nullptr);
+                mciSendString(seek_music, nullptr,0,nullptr);
                 mciSendString(play_music,nullptr,0,nullptr);
                 can_play_button_music = false;
             }

@@ -10,7 +10,8 @@ private:
     IMAGE back_ground;
     button begin_game;
 public:
-    begin_sence(): begin_game(470,80,331,147,1,"button_music","to 40",
+    begin_sence(): begin_game(470,80,331,147,1,
+    "button_music","to 40",
     {"../resourse/begin/menu1.png","../resourse/begin/menu2.png"},
     {"../resourse/begin/menu1_background.png","../resourse/begin/menu2_background.png"})
     {
@@ -27,8 +28,13 @@ public:
     }
 
     void display() override{
+        BeginBatchDraw();
+        cleardevice();
+
         putimage(0,0,&back_ground);
         begin_game.display();
+
+        FlushBatchDraw();
     }
 
     Status progress(ExMessage &msg) override{

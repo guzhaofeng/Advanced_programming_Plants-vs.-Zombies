@@ -2,15 +2,31 @@
 
 #include "button.h"
 #include "sence.h"
+#include "timer.h"
 
 #include "begin_sence.h"
 #include "choose_game.h"
 
+#include "game.h"
+#include "toolbar.h"
+#include "single_path.h"
+#include "sunday_game.h"
+
+#include "character.h"
+#include "zombie.h"
+#include "plant.h"
+
+#include "sunflower.h"
+
 int main() {
+    ios::sync_with_stdio(false); // 关闭同步
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
     ExMessage msg;
     Status status;
     sence* main_sence = new begin_sence;
+
 
     initgraph(900,600);//初始化窗口
     setbkcolor(WHITE);
@@ -22,6 +38,7 @@ int main() {
         //读取操作
         peekmessage(&msg);
 
+
         //处理数据
         status = main_sence->progress(msg);
 
@@ -29,13 +46,14 @@ int main() {
             sence* sence_will_be_delete = main_sence;
             main_sence = new choose_game;
             delete sence_will_be_delete;
+        }else if(status == change_to_sunday_game){
+            sence* sence_will_be_delete = main_sence;
+            main_sence = new sunday_game;
+            delete sence_will_be_delete;
         }
 
         //绘制画面
-        BeginBatchDraw();
-        cleardevice();
         main_sence->display();
-        FlushBatchDraw();
     }
 
     return 0;
