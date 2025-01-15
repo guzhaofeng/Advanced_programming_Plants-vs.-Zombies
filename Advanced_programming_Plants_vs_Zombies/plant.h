@@ -1,24 +1,26 @@
 #include "all_header_file.h"
 #include "character.h"
+#include "timer.h"
 
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_PLANT_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_PLANT_H
 
-int time_num = 50000;
+int time_num = 60000;
 
 class plant :public character{
 private:
     vector<IMAGE> living;
-    int animation_loop;
+    int animation_loop=0;
 
     Timer timer;
+    Timer timer2;
 
     IMAGE card;
     int card_x,card_y,card_width,card_height;
     int card_idx;
 public:
-    plant(const char* card_address,vector<const char*> living_address,int card_idx) : character(300),card_idx(card_idx),timer(std::chrono::microseconds(time_num)) { // 假设 300 是植物的生命值
-        loadimage(&card, "../resourse/character/plants/sunflower/card.png");
+    plant(const char* card_address,const vector<const char*>& living_address,int card_idx) : character(300),card_idx(card_idx),timer(std::chrono::microseconds(time_num)),timer2(std::chrono::microseconds(time_num)) { // 假设 300 是植物的生命值
+        loadimage(&card, card_address);
 
         for(const char* address : living_address){
             IMAGE image;
@@ -32,7 +34,13 @@ public:
         card_height = 89;
     }
 
-    plant(plant* plant1,int y) : character(plant1->health), timer(std::chrono::microseconds(time_num)),animation_loop(0){
+    plant(plant* plant1,int y) : character(plant1->health), timer(std::chrono::microseconds(time_num)),timer2(std::chrono::microseconds(time_num)),animation_loop(0){
+
+        card_x = 24+card_idx*66;
+        card_y = 6;
+        card_width = 64;
+        card_height = 89;
+        card_idx = plant1->card_idx;
 
         for(auto& image : plant1->living){
             living.push_back(image);
@@ -41,6 +49,7 @@ public:
         position = y;
         cout << "you are in plant copy function" << endl;
     }
+
 
     void display(int path_idx) override{
 
@@ -64,11 +73,7 @@ public:
         putimage(card_x,card_y,&card);
     }
 
-    Status progress(Status status) override{
-
-    }
-
-    inline int can_touch_card(int a,int b) const{
+    [[nodiscard]] inline int can_touch_card(int a,int b) const{
         if(card_x<=a && a<card_x+card_width && card_y<=b && b<card_y+card_height){
             cout << "a card is in touch" << endl;
             return card_idx;
@@ -76,6 +81,24 @@ public:
         return 0;
     }
 
+    bool be_attacked(int attack){
+        timer2.get_delay();
+        if(timer2.can_change_content()){
+            health -= attack;
+        }
+        if(health <= 0){
+            return true;
+        }
+        return false;
+    }
+
+    void set_position(int idx){
+        position = 115 + (idx-1)*81;
+    }
+
+    virtual Status progress(Status status) override = 0;
+
+    virtual Status get_plant_name() = 0;
 };
 
 

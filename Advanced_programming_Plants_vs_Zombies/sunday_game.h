@@ -9,7 +9,9 @@ private:
 
 public:
     sunday_game():game("../resourse/game/sunday_back_ground.jpg",3,{true,true,true},true){
-
+        map[1].zombie_list.push_back(new zombie(450));
+        map[0].zombie_list.push_back(new zombie(450));
+        map[2].zombie_list.push_back(new zombie(450));
     }
 };
 

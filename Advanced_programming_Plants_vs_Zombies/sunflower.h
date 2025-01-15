@@ -1,5 +1,6 @@
 #include "all_header_file.h"
 #include "plant.h"
+#include "timer.h"
 
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_SUNFLOWER_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_SUNFLOWER_H
@@ -9,9 +10,11 @@
 class sunflower : public plant{
 private:
     int num_of_sunshine = 25;
-
+    int make_sunflower_time = 100;
+    int now_make_time = 0;
+    Timer timer1;
 public:
-    sunflower(int idx): plant("../resourse/character/plants/sunflower/card.png",{
+    explicit sunflower(int idx): plant("../resourse/character/plants/sunflower/card.png",{
             "../resourse/character/plants/sunflower/living/1.png",
             "../resourse/character/plants/sunflower/living/2.png",
             "../resourse/character/plants/sunflower/living/3.png",
@@ -30,8 +33,23 @@ public:
             "../resourse/character/plants/sunflower/living/16.png",
             "../resourse/character/plants/sunflower/living/17.png",
             "../resourse/character/plants/sunflower/living/18.png"},
-            idx
-    ){}
+            idx),timer1(std::chrono::microseconds(time_num)){}
+
+    Status progress(Status status) override{
+        timer1.get_delay();
+        if(timer1.can_change_content()){
+            now_make_time++;
+            if(now_make_time == make_sunflower_time){
+                now_make_time=0;
+                return make_a_sunshine;
+            }
+        }
+        return ing;
+    }
+
+    Status get_plant_name() override{
+        return name_sunflower;
+    }
 
 
 };

@@ -8,7 +8,7 @@
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_GAME_H
 
 class game : public sence{
-private:
+protected:
     IMAGE back_ground;
 
     Toolbar toolbar;
@@ -20,9 +20,14 @@ private:
 
     int sun_num = 100;
     vector<single_path> map;
+
+
 public:
     game(const TCHAR* image_path,int path_num,const vector<bool>& is_land,bool is_day_not_night):toolbar(),is_day_not_night(is_day_not_night){
         loadimage(&back_ground,image_path);//加载背景
+
+        mouse_y = 0;
+        mouse_x = 0;
 
         for (int i = 0; i < path_num; ++i) {
             map.emplace_back(i-(path_num/2)-1,is_day_not_night,is_land[i]);
@@ -36,6 +41,9 @@ public:
     }
 
     void display() override{
+
+
+
         BeginBatchDraw();
         cleardevice();
 
@@ -55,6 +63,12 @@ public:
     }
 
     Status progress(ExMessage &msg) override{
+        for (int i = 0; i < map.size(); ++i) {
+            if(map[i].progress()==game_over){
+                return change_to_game_over;
+            }
+        }
+
         mouse_x = msg.x;
         mouse_y = msg.y;
 

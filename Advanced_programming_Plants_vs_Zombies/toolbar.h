@@ -1,13 +1,14 @@
 #include "all_header_file.h"
 #include "plant.h"
 #include "sunflower.h"
+#include "peashooter.h"
 
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_TOOLBAR_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_TOOLBAR_H
 
 
 class Toolbar {
-private:
+protected:
     IMAGE toolbar_image;
     vector<plant*> plant_list;
 
@@ -16,6 +17,9 @@ public:
     Toolbar(){
         loadimage(&toolbar_image,"../resourse/game/toolbar.png");
         plant_list.push_back(new sunflower(1));
+        plant_list.push_back(new peashooter(2));
+        plant_list.push_back(new sunflower(3));
+        plant_list.push_back(new peashooter(4));
     }
 
     ~Toolbar(){
@@ -64,8 +68,16 @@ public:
     plant* creat_new_plant(int idx){
         cout << "you are in creat_new_plant " << "idx = " << idx << " is_in_touch_num = "  << is_in_touch_a_card << endl;
 
-        plant* result = new plant(plant_list[is_in_touch_a_card-1],(idx-1)*81+115);
+        Status name = plant_list[is_in_touch_a_card-1]->get_plant_name();
+        plant* result;
 
+        if(name == name_sunflower){
+            result = new sunflower(1);
+        }else if(name == name_peashooter){
+            result = new peashooter(0);
+        }
+
+        result->set_position(idx);
         return result;
     }
 };
