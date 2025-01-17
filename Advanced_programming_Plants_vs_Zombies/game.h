@@ -33,6 +33,7 @@ public:
             map.emplace_back(i-(path_num/2)-1,is_day_not_night,is_land[i]);
         }
 
+        mciSendString("open ../resourse/game/collectSunshine.wav.mp3 alias collects_sunshine", nullptr,0,nullptr);
         mciSendString("open ../resourse/game/gamingBgm1.mp3 alias bgm1", nullptr,0,nullptr);
         mciSendString("play bgm1 repeat", nullptr,0,nullptr);
     }
@@ -41,8 +42,6 @@ public:
     }
 
     void display() override{
-
-
 
         BeginBatchDraw();
         cleardevice();
@@ -58,6 +57,12 @@ public:
         }else{
             toolbar.display();
         }
+
+        char str[20];
+        sprintf(str, "%d", sun_num);
+        setcolor(BLACK);
+        outtextxy(32, 76, str);
+
 
         FlushBatchDraw();
     }
@@ -75,20 +80,34 @@ public:
         if(toolbar.progress(msg) == touch_a_card){
             is_in_puting_a_card = true;
             return ing;
-        }else if(is_in_puting_a_card && msg.message == WM_LBUTTONDOWN){
+        }else if(msg.message == WM_LBUTTONDOWN && is_in_puting_a_card){
             int result = 0;
-            for (auto& temp : map) {
+            for (auto& temp : map){
                 result = temp.can_touch(msg.x,msg.y);
                 if(result != 0){
-                    cout << "you have plant a plant" << endl;
-
                     is_in_puting_a_card = false;
-
-                    temp.progress(result,toolbar.creat_new_plant(result));
+                    int cost = toolbar.get_sunshine_cost();
+                    if(sun_num-cost>=0){
+                        sun_num-=cost;
+                        cout << "you have plant a plant" << endl;
+                        temp.progress(result,toolbar.creat_new_plant(result));
+                    }
 
                     return ing;
                 }
             }
+        }else if(msg.message == WM_LBUTTONDOWN){
+            for (int i = 0; i < map.size(); ++i) {
+                int result = map[i].get_sunshine(mouse_x,mouse_y);
+                if(result!=0){
+                    sun_num+=result;
+                    mciSendString("seek collects_sunshine to 0", nullptr,0,nullptr);
+                    mciSendString("play collects_sunshine", nullptr,0,nullptr);
+                    return ing;
+                }
+            }
+        }else if(msg.message == WM_RBUTTONDOWN && is_in_puting_a_card){
+            is_in_puting_a_card = false;
         }
 
 

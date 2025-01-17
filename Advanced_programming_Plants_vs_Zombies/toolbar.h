@@ -11,9 +11,12 @@ class Toolbar {
 protected:
     IMAGE toolbar_image;
     vector<plant*> plant_list;
-
     int is_in_touch_a_card = 0;
 public:
+    int get_sunshine_cost(){
+        return plant_list[is_in_touch_a_card-1]->sunshine_deplete;
+    }
+
     Toolbar(){
         loadimage(&toolbar_image,"../resourse/game/toolbar.png");
         plant_list.push_back(new sunflower(1));

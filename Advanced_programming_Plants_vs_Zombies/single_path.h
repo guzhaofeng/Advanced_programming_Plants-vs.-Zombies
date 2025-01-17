@@ -2,7 +2,8 @@
 #include "zombie.h"
 #include "plant.h"
 #include "timer.h"
-#include <list>
+#include "sunshine.h"
+#include "Pea_bullets.h"
 
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_SINGLE_PATH_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_SINGLE_PATH_H
@@ -12,11 +13,12 @@ class single_path {
 public:
     list<zombie*> zombie_list;
     vector<plant*> plant_queue;
+    list<sunshine*> sunshine_list;
+    list<Pea_bullets*> bullets_list;
 
     int path_num;
     bool is_day_not_night;
     bool is_land;
-
 public:
     single_path(int path_num,bool is_day_not_night,bool is_land):path_num(path_num),is_day_not_night(is_day_not_night),is_land(is_land){
         for (int i = 0; i < 10; ++i) {
@@ -28,10 +30,23 @@ public:
 
     ~single_path(){
         for (auto temp : zombie_list) {
+            if(!temp){
+                continue;
+            }
             delete temp;
             temp = nullptr;
         }
         for (auto temp : plant_queue) {
+            if(!temp){
+                continue;
+            }
+            delete temp;
+            temp = nullptr;
+        }
+        for (auto temp : sunshine_list) {
+            if(!temp){
+                continue;
+            }
             delete temp;
             temp = nullptr;
         }
@@ -50,6 +65,51 @@ public:
             (*it)->display(path_num);
             it++;
         }
+
+        for(auto temp : sunshine_list){
+            if(temp){
+                temp->display(path_num);
+            }
+        }
+
+        auto it1 = bullets_list.begin();
+        while(it1 != bullets_list.end()){
+            auto temp = *it1;
+
+            if(temp->x_position>=1000){//对越界的子弹进行处理
+                bullets_list.erase(it1);
+                delete temp;
+                break;
+            }
+
+            if(temp){
+                zombie* temp_zombie = nullptr;
+                for(auto temp1 :zombie_list){
+                    if(temp1->zombieAnimationStatus == zombie::wALK || temp1->zombieAnimationStatus == zombie::eAT){
+                        temp_zombie = temp1;
+                        break;
+                    }
+                }
+
+                if((temp_zombie && temp_zombie->get_position()<temp->x_position-70) || temp->die_time < 5){
+                    temp->display_explode();
+                    if(temp->die_time <= 0){
+                        bullets_list.erase(it1);
+                        delete temp;
+                        break;
+                    }else if(temp->die_time == 5){
+                        temp_zombie->set_health(300);
+                        temp->die_time--;
+                    }
+                }else{
+                    temp->display_normal();
+                }
+            }
+
+            it1++;
+        }
+
+        ///////////////////////////
     }
 
     [[nodiscard]] int can_touch(int x,int y) const{
@@ -67,6 +127,16 @@ public:
 
         auto it = zombie_list.begin();
         while(it != zombie_list.end()){
+            if((*it)->zombieAnimationStatus == zombie::oVER){
+                zombie* temp1 = (*it);
+                auto temp2 = it;
+                it++;
+                delete temp1;
+                zombie_list.erase(temp2);
+                cout << "zombie is deleted" << endl;
+                continue;
+            }
+
             int x = (*it)->get_position();
             int idx = (x-115)/81+2;
 
@@ -100,21 +170,48 @@ public:
         for (int i = 1; i < 10; ++i) {
             if(plant_queue[i]){
                 Status result = ing;
-                if(!zombie_list.empty() && zombie_list.front()->get_position() >= i*81+115){
+
+                zombie* temp_zombie = nullptr;
+                for(auto temp :zombie_list){
+                    if(temp && (temp->zombieAnimationStatus == zombie::wALK || temp->zombieAnimationStatus == zombie::eAT)){
+                        temp_zombie = temp;
+                        break;
+                    }
+                }
+
+                if(temp_zombie && temp_zombie->get_position() >= i*81-100){
                     result = plant_queue[i]->progress(can_attack);
                 }else{
                     result = plant_queue[i]->progress(can_not_attack);
                 }
 
                 if(result==make_a_sunshine){
-
+                    sunshine* new_sunshine = new sunshine(i,path_num);
+                    sunshine_list.push_back(new_sunshine);
                 }else if(result==make_a_peashooter_attack){
-
+                    bullets_list.push_back(new Pea_bullets(i,path_num));
+                    cout << "make a bullet" << endl;
                 }
             }
         }
 
         return ing;
+    }
+
+    int get_sunshine(int x,int y){
+        auto it = sunshine_list.begin();
+        while(it != sunshine_list.end()){
+            auto temp = *it;
+            int result = temp->touch_sunshine(x,y);
+            if(result!=0){
+                sunshine_list.erase(it);
+                delete temp;
+                return result;
+            }
+            it++;
+        }
+
+        return 0;
     }
 
     Status progress(int idx,plant* new_plant){//种植物

@@ -10,8 +10,8 @@ private:
     int attack = 20;
     Timer timer1;
 
-    int attack_time = 10;
-    int now_attack_time = 9;
+    int attack_time = 25;
+    int now_attack_time = 15;
 public:
     peashooter(int idx): plant("../resourse/character/plants/Peashooter/card.png",{
                                       "../resourse/character/plants/Peashooter/living/1.png",
@@ -26,7 +26,7 @@ public:
                                       "../resourse/character/plants/Peashooter/living/10.png",
                                       "../resourse/character/plants/Peashooter/living/11.png",
                                       "../resourse/character/plants/Peashooter/living/13.png"},
-                              idx),timer1(std::chrono::microseconds(time_num)){}
+                              idx,100),timer1(std::chrono::microseconds(time_num)){}
 
     Status progress(Status status) override{
         if(status == can_attack){
@@ -34,7 +34,7 @@ public:
             if(timer1.can_change_content()){
                 now_attack_time += 1;
             }
-            if(now_attack_time == attack_time){
+            if(now_attack_time >= attack_time){
                 now_attack_time = 0;
                 return make_a_peashooter_attack;
             }

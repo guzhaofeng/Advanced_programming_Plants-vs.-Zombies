@@ -5,7 +5,7 @@
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_PLANT_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_PLANT_H
 
-int time_num = 60000;
+int time_num = 100000;
 
 class plant :public character{
 private:
@@ -19,7 +19,9 @@ private:
     int card_x,card_y,card_width,card_height;
     int card_idx;
 public:
-    plant(const char* card_address,const vector<const char*>& living_address,int card_idx) : character(300),card_idx(card_idx),timer(std::chrono::microseconds(time_num)),timer2(std::chrono::microseconds(time_num)) { // 假设 300 是植物的生命值
+    int sunshine_deplete;
+
+    plant(const char* card_address,const vector<const char*>& living_address,int card_idx,int deplete) : character(300),card_idx(card_idx),timer(std::chrono::microseconds(time_num)),timer2(std::chrono::microseconds(time_num)),sunshine_deplete(deplete) { // 假设 300 是植物的生命值
         loadimage(&card, card_address);
 
         for(const char* address : living_address){

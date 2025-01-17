@@ -48,6 +48,10 @@ void putimagewithTransparent(int x,int y,IMAGE* temp,IMAGE* back_ground){
 
 void putimagewithTransparent(int x,int y,IMAGE* temp){
 
+    if(!temp){
+        cout << "image nullptr" << endl;
+    }
+
     IMAGE img = *temp;
     IMAGE img1;
     DWORD *d1;

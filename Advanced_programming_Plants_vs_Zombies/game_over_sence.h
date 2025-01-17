@@ -17,9 +17,14 @@ private:
     int width = 498;
     int height = 439;
 
+
+
     double transform = 0.0;
 public:
-    game_over_sence(){}
+    game_over_sence(){
+        mciSendString("open ../resourse/game_over/zombieLaugh.mp3 alias zombieLaugh", nullptr,0,nullptr);
+        mciSendString("play zombieLaugh", nullptr,0,nullptr);
+    }
 
     void display(){
         BeginBatchDraw();

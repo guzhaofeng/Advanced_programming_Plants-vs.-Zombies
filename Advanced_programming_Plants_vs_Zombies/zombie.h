@@ -1,5 +1,6 @@
 #include "all_header_file.h"
 #include "timer.h"
+#include "character.h"
 
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_ZOMBIE_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_ZOMBIE_H
@@ -36,12 +37,25 @@ private:
     vector<IMAGE> death_standing;
     int death_standing_loop = 0;
 
-    Zombie_animation_status zombieAnimationStatus = wALK;
     int speed = 1;
 
     Timer timer;
 public:
     int attack = 5;
+    Zombie_animation_status zombieAnimationStatus = wALK;
+
+    void set_health(int attack1){
+        health -= attack1;
+        if(health<=0){
+            if(zombieAnimationStatus == wALK) {
+                zombieAnimationStatus = dEATH_walking;
+            }else if(zombieAnimationStatus == eAT){
+                zombieAnimationStatus = dEATH_standing;
+            }
+
+            cout << "zombie die" << endl;
+        }
+    }
 
     void display(int path_idx) override{
 
@@ -87,41 +101,52 @@ public:
                eat_loop = 0;
             }
         }else if(zombieAnimationStatus == dEATH_standing){
-            if(death_standing_loop != death_standing.size()-1){
-                putimagewithTransparent(position,361+path_idx*108,&death_standing[death_standing_loop++]);
+            if(death_standing_loop < death_standing.size()){
+                putimagewithTransparent(position-20,332+path_idx*100,&death_standing[death_standing_loop]);
+            }
+            if(head_loop < head.size()){
+                putimagewithTransparent(position+50,332+path_idx*100,&head[head_loop]);
             }
 
-            if(head_loop != head.size()-1){
-                putimagewithTransparent(position,361+path_idx*108,&head[head_loop++]);
+            timer.get_delay();
+            if(timer.can_change_content()){
+                death_standing_loop++;
+                head_loop++;
             }
 
-            if(head_loop == head.size()-1 && death_standing_loop == death_standing.size()-1){
+            if(death_standing_loop >= death_standing.size()){
                 zombieAnimationStatus = oVER;
             }
+
         }else if(zombieAnimationStatus == dEATH_walking){
-            if(death_walking_loop != death_walking.size()-1){
-                putimagewithTransparent(position,361+path_idx*108,&death_walking[death_walking_loop++]);
+            if(death_walking_loop < death_walking.size()){
+                putimagewithTransparent(position,332+path_idx*100,&death_walking[death_walking_loop]);
             }
-
-            if(head_loop != head.size()-1){
-                putimagewithTransparent(position,361+path_idx*108,&head[head_loop++]);
+            if(head_loop < head.size()){
+                putimagewithTransparent(position+50,332+path_idx*100,&head[head_loop]);
             }
-
-            if(head_loop == head.size()-1 && death_walking_loop == death_walking.size()-1){
-                if(death_standing_loop != death_standing.size()-1){
-                    putimagewithTransparent(position,361+path_idx*108,&death_standing[death_standing_loop++]);
-                }else{
+            if(death_walking_loop >= death_walking.size() && death_standing_loop < death_standing.size()){
+                putimagewithTransparent(position-20,332+path_idx*100,&death_standing[death_standing_loop]);
+                timer.get_delay();
+                if(timer.can_change_content()){
+                    death_standing_loop++;
+                }
+                if(death_standing_loop >= death_standing.size()){
                     zombieAnimationStatus = oVER;
+                }
+            }else{
+                timer.get_delay();
+                if(timer.can_change_content()){
+                    death_walking_loop++;
+                    head_loop++;
                 }
             }
         }
     }
     Status progress(Status status) override{
 
-        if(status == can_attack){
+        if(status == can_attack && zombieAnimationStatus != eAT && zombieAnimationStatus != dEATH_standing && zombieAnimationStatus!=dEATH_walking){
             zombieAnimationStatus = eAT;
-        }else if(status == can_not_attack){
-            zombieAnimationStatus = wALK;
         }
         if(position <= -20){
             return game_over;
@@ -231,6 +256,106 @@ public:
         walk.push_back(image);
         loadimage(&image,"../resourse/character/zombie/zm_walk/22.png");
         walk.push_back(image);
+
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (1).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (2).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (3).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (4).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (5).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (6).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (7).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (8).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (9).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (10).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (11).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (12).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (13).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (14).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (15).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (16).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (17).png");
+        death_walking.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieLostHead\\ZombieLostHead (18).png");
+        death_walking.push_back(image);
+
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(1).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(2).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(3).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(4).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(5).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(6).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(7).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(8).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(9).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(10).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(11).png");
+        head.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieHead\\ZombieHead(12).png");
+        head.push_back(image);
+
+
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (1).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (2).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (3).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (4).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (5).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (6).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (7).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (8).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (9).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (10).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (11).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (12).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (13).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (14).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (15).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (16).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (17).png");
+        death_standing.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (18).png");
+        death_standing.push_back(image);
     }
 };
 

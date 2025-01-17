@@ -10,7 +10,7 @@
 class sunflower : public plant{
 private:
     int num_of_sunshine = 25;
-    int make_sunflower_time = 100;
+    int make_sunflower_time = 200;
     int now_make_time = 0;
     Timer timer1;
 public:
@@ -33,13 +33,13 @@ public:
             "../resourse/character/plants/sunflower/living/16.png",
             "../resourse/character/plants/sunflower/living/17.png",
             "../resourse/character/plants/sunflower/living/18.png"},
-            idx),timer1(std::chrono::microseconds(time_num)){}
+            idx,50),timer1(std::chrono::microseconds(time_num)){}
 
     Status progress(Status status) override{
         timer1.get_delay();
         if(timer1.can_change_content()){
             now_make_time++;
-            if(now_make_time == make_sunflower_time){
+            if(now_make_time >= make_sunflower_time){
                 now_make_time=0;
                 return make_a_sunshine;
             }

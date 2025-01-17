@@ -8,11 +8,15 @@
 
 
 
+##### 游戏教程
+
+在放置植物卡片状态时，按鼠标右键可以取消
+
+
+
 ##### 组织架构
 
-![image-20250114202909006](C:\Users\wuyaoyao\AppData\Roaming\Typora\typora-user-images\image-20250114202909006.png)
-
-
+![class](./class.png)
 
 
 

@@ -16,6 +16,7 @@
 #include "zombie.h"
 #include "plant.h"
 #include "sunshine.h"
+#include "Pea_bullets.h"
 
 #include "sunflower.h"
 #include "peashooter.h"
@@ -30,7 +31,7 @@ int main() {
 
 
     initgraph(900,600);//初始化窗口
-    setbkcolor(WHITE);
+    setbkcolor(RGB(234,234,172));
 
 
     bool running = true;
