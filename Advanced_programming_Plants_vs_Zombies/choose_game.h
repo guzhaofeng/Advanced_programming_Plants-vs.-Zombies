@@ -4,6 +4,9 @@
 #include "all_header_file.h"
 #include "sence.h"
 
+extern int level;
+extern int money;
+
 class choose_game:public sence{
 private:
     IMAGE back_ground;
@@ -12,6 +15,8 @@ private:
 
     button sunday_button;
     button sunwaterday_button;
+
+    int begin = 0;
 public:
     choose_game(): sunday_button(30,170,424,270,1,
         "tabBlock","to 0",
@@ -35,7 +40,7 @@ public:
         mciSendString("close choose_game_music",nullptr,0,nullptr);
     }
 
-    void display() override{
+    void display(ExMessage &msg) override{
         BeginBatchDraw();
         cleardevice();
 
@@ -43,13 +48,29 @@ public:
         sunday_button.display();
         sunwaterday_button.display();
 
+        char str[20];
+        setcolor(TRANSPARENT);
+        sprintf(str, "level is %d",level);
+        settextstyle(30, 0, "Arial");
+        outtextxy(770, 480, str);
+        sprintf(str, "money is %d",money);
+        outtextxy(730, 520, str);
+
         FlushBatchDraw();
     }
 
     Status progress(ExMessage &msg) override{
+        begin++;
+        if(begin<=100){
+            return ing;
+        }
+
         if(msg.message == WM_LBUTTONDOWN && sunday_button.can_touch(msg.x,msg.y)){
             return change_to_sunday_game;
         }else if(msg.message == WM_LBUTTONDOWN && sunwaterday_button.can_touch(msg.x,msg.y)){
+            if(level < 2){
+                return ing;
+            }
             return change_to_sunwaterday_game;
         }
 

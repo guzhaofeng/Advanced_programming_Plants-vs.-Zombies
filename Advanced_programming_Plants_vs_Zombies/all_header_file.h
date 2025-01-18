@@ -13,6 +13,7 @@
 #include <chrono>
 #include <queue>
 #include <list>
+#include "fstream"
 
 using namespace std;
 
@@ -27,18 +28,23 @@ enum Status{
     change_to_sunwaterday_game,
     change_to_sunday_game,
     change_to_game_over,
+    change_to_game_win,
 
     touch_a_card,
     game_over,
 
     can_attack,
     can_not_attack,
+    pepper_attack,
+    pepper_delete,
 
     make_a_peashooter_attack,
     make_a_sunshine,
 
     name_sunflower,
-    name_peashooter
+    name_peashooter,
+    name_wallnut,
+    name_pepper
 };
 
 void putimagewithTransparent(int x,int y,IMAGE* temp,IMAGE* back_ground){
@@ -60,7 +66,7 @@ void putimagewithTransparent(int x,int y,IMAGE* temp){
     float h,s,l;
     for(int i=0;i<img1.getheight()*img1.getwidth();i++){
         RGBtoHSL(BGR(d1[i]),&h,&s,&l);
-        if(l<0.002){
+        if(l<0.005){
             d1[i]=BGR(WHITE);
         }
         if(d1[i]!=BGR(WHITE)){

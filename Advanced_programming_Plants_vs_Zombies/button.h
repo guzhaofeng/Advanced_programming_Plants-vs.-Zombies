@@ -62,7 +62,7 @@ public:
             if(!back_ground.empty()){
                 putimagewithTransparent(x,y,&image_list[is_in_loop],&back_ground[is_in_loop]);
             }else{
-                putimage(x,y,&image_list[is_in_loop]);
+                putimagewithTransparent(x,y,&image_list[is_in_loop]);
             }
 
             is_in_loop--;
@@ -70,7 +70,7 @@ public:
             if(!back_ground.empty()){
                 putimagewithTransparent(x,y,&image_list[is_in_loop],&back_ground[is_in_loop]);
             }else{
-                putimage(x,y,&image_list[is_in_loop]);
+                putimagewithTransparent(x,y,&image_list[is_in_loop]);
             }
         }
     }

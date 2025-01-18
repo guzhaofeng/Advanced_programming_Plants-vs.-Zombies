@@ -19,8 +19,12 @@ public:
     int path_num;
     bool is_day_not_night;
     bool is_land;
+
+    Timer timer;
+    int sunshine_make_time = 300 + rand()%600;
+    int now_shine_time = 100;
 public:
-    single_path(int path_num,bool is_day_not_night,bool is_land):path_num(path_num),is_day_not_night(is_day_not_night),is_land(is_land){
+    single_path(int path_num,bool is_day_not_night,bool is_land):path_num(path_num),is_day_not_night(is_day_not_night),is_land(is_land),timer(std::chrono::microseconds(time_num)){
         for (int i = 0; i < 10; ++i) {
             plant_queue.push_back(nullptr);
         }
@@ -98,7 +102,7 @@ public:
                         delete temp;
                         break;
                     }else if(temp->die_time == 5){
-                        temp_zombie->set_health(300);
+                        temp_zombie->set_health(25);
                         temp->die_time--;
                     }
                 }else{
@@ -112,7 +116,7 @@ public:
         ///////////////////////////
     }
 
-    [[nodiscard]] int can_touch(int x,int y) const{
+    [[nodiscard]] inline int can_touch(int x,int y) const{
         if(115<=x && x<849 && 381+path_num*108<=y && y<381+path_num*108+108){
             int result = (x-115)/81 + 1;
             if(plant_queue[result]){
@@ -124,6 +128,15 @@ public:
     }
 
     Status progress(){//僵尸和植物的动作
+        timer.get_delay();
+        if(timer.can_change_content()){
+            now_shine_time++;
+        }
+        if(now_shine_time > sunshine_make_time){
+            now_shine_time=0;
+            sunshine_list.push_back(new sunshine(rand()%4,rand()%5-2));
+            sunshine_make_time = 300+rand()%600;
+        }
 
         auto it = zombie_list.begin();
         while(it != zombie_list.end()){
@@ -191,6 +204,15 @@ public:
                 }else if(result==make_a_peashooter_attack){
                     bullets_list.push_back(new Pea_bullets(i,path_num));
                     cout << "make a bullet" << endl;
+                }else if(result==pepper_attack){
+                    for(zombie* temp1 : zombie_list){
+                        if(temp1){
+                            temp1->zombieAnimationStatus = zombie::aSHES;
+                        }
+                    }
+                }else if(result==pepper_delete){
+                    delete plant_queue[i];
+                    plant_queue[i]= nullptr;
                 }
             }
         }

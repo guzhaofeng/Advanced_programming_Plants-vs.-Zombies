@@ -27,7 +27,7 @@ public:
         mciSendString("close background_music", nullptr, 0, nullptr);
     }
 
-    void display() override{
+    void display(ExMessage &msg) override{
         BeginBatchDraw();
         cleardevice();
 

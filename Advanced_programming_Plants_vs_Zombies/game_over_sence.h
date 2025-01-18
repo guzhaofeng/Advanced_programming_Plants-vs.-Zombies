@@ -26,7 +26,7 @@ public:
         mciSendString("play zombieLaugh", nullptr,0,nullptr);
     }
 
-    void display(){
+    void display(ExMessage &msg){
         BeginBatchDraw();
 
         loadimage(&words,"../resourse/game_over/game_over.png",width* transform,height*transform);

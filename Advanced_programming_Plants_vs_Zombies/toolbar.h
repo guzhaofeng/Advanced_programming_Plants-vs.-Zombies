@@ -2,6 +2,8 @@
 #include "plant.h"
 #include "sunflower.h"
 #include "peashooter.h"
+#include "wallnut.h"
+#include "pepper.h"
 
 #ifndef ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_TOOLBAR_H
 #define ADVANCED_PROGRAMMING_PLANTS_VS_ZOMBIES_TOOLBAR_H
@@ -21,8 +23,8 @@ public:
         loadimage(&toolbar_image,"../resourse/game/toolbar.png");
         plant_list.push_back(new sunflower(1));
         plant_list.push_back(new peashooter(2));
-        plant_list.push_back(new sunflower(3));
-        plant_list.push_back(new peashooter(4));
+        plant_list.push_back(new wallnut(3));
+        plant_list.push_back(new pepper(4));
     }
 
     ~Toolbar(){
@@ -34,7 +36,7 @@ public:
         }
     }
 
-    void display(){
+    inline void display(){
         putimage(0,0,&toolbar_image);
 
         for (int i = 0; i < plant_list.size(); ++i) {
@@ -42,7 +44,7 @@ public:
         }
 
     }
-    void display(int mouse_x,int mouse_y){
+    inline void display(int mouse_x,int mouse_y){
         putimage(0,0,&toolbar_image);
 
         for (int i = 0; i < plant_list.size(); ++i) {
@@ -78,6 +80,10 @@ public:
             result = new sunflower(1);
         }else if(name == name_peashooter){
             result = new peashooter(0);
+        }else if(name == name_wallnut){
+            result = new wallnut(1);
+        }else if(name == name_pepper){
+            result = new pepper(1);
         }
 
         result->set_position(idx);

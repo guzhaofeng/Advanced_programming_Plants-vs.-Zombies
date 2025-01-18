@@ -8,7 +8,7 @@
 int time_num = 100000;
 
 class plant :public character{
-private:
+protected:
     vector<IMAGE> living;
     int animation_loop=0;
 
@@ -53,7 +53,7 @@ public:
     }
 
 
-    void display(int path_idx) override{
+    virtual void display(int path_idx) override{
 
         putimagewithTransparent(position,385+path_idx*100,&living[animation_loop]);
 

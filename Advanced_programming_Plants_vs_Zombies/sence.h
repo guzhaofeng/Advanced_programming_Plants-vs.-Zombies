@@ -5,7 +5,7 @@
 
 class sence {
 public:
-    virtual void display() = 0;
+    virtual void display(ExMessage &msg) = 0;
     virtual Status progress(ExMessage& msg) = 0;
     virtual ~sence() = 0;
 };

@@ -18,12 +18,17 @@ protected:
 
     bool is_day_not_night;
 
-    int sun_num = 100;
+    int sun_num = 150;
     vector<single_path> map;
 
+    Timer timer;
+    int all_game_time = 1*60*24;
+    int now_time = 0;
 
+    int zombie_appear_time = 240;
+    int zombie_min_appear_time = 20;
 public:
-    game(const TCHAR* image_path,int path_num,const vector<bool>& is_land,bool is_day_not_night):toolbar(),is_day_not_night(is_day_not_night){
+    game(const TCHAR* image_path,int path_num,const vector<bool>& is_land,bool is_day_not_night):toolbar(),is_day_not_night(is_day_not_night),timer(std::chrono::microseconds(time_num)){
         loadimage(&back_ground,image_path);//加载背景
 
         mouse_y = 0;
@@ -41,16 +46,15 @@ public:
         mciSendString("stop bgm1", nullptr,0,nullptr);
     }
 
-    void display() override{
+    void display(ExMessage &msg) override{
+
+        mouse_x = msg.x;
+        mouse_y = msg.y;
 
         BeginBatchDraw();
         cleardevice();
 
         putimage(-140,0,&back_ground);
-
-        for(auto& single_path : map){
-            single_path.display();
-        }
 
         if(is_in_puting_a_card){
             toolbar.display(mouse_x,mouse_y);
@@ -58,16 +62,42 @@ public:
             toolbar.display();
         }
 
+        for(auto& single_path : map){
+            single_path.display();
+        }
+
+        settextstyle(20, 0, "Arial");
         char str[20];
         sprintf(str, "%d", sun_num);
         setcolor(BLACK);
         outtextxy(32, 76, str);
 
+        char str1[20];
+        sprintf(str1, "%f", ((float)now_time)/((float)all_game_time));
+        setcolor(BLACK);
+        outtextxy(800, 570, str1);
 
         FlushBatchDraw();
     }
 
     Status progress(ExMessage &msg) override{
+        timer.get_delay();
+        if(timer.can_change_content()){
+
+            now_time++;
+            if(now_time%zombie_appear_time == 0){
+                map[rand()%map.size()].zombie_list.push_back(new zombie(750));
+                if(zombie_appear_time>=zombie_min_appear_time){
+                    zombie_appear_time-=rand()%8+1;
+                }
+            }
+        }
+
+
+        if(now_time > all_game_time){
+            return change_to_game_win;
+        }
+
         for (int i = 0; i < map.size(); ++i) {
             if(map[i].progress()==game_over){
                 return change_to_game_over;

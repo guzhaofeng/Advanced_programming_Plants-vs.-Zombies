@@ -141,12 +141,26 @@ public:
                     head_loop++;
                 }
             }
+        }else if(zombieAnimationStatus == aSHES){
+
+            putimagewithTransparent(position,332+path_idx*100,&ashes[ashes_loop]);
+
+            timer.get_delay();
+            if(timer.can_change_content()){
+                ashes_loop++;
+            }
+
+            if(ashes_loop >= ashes.size()){
+                zombieAnimationStatus = oVER;
+            }
         }
     }
     Status progress(Status status) override{
 
-        if(status == can_attack && zombieAnimationStatus != eAT && zombieAnimationStatus != dEATH_standing && zombieAnimationStatus!=dEATH_walking){
+        if(status == can_attack && zombieAnimationStatus != eAT && zombieAnimationStatus != dEATH_standing && zombieAnimationStatus!=dEATH_walking && zombieAnimationStatus!=aSHES){
             zombieAnimationStatus = eAT;
+        }else if(status != can_attack && zombieAnimationStatus != dEATH_standing && zombieAnimationStatus!=dEATH_walking && zombieAnimationStatus!=aSHES){
+            zombieAnimationStatus = wALK;
         }
         if(position <= -20){
             return game_over;
@@ -159,7 +173,7 @@ public:
         return position;
     }
 
-    explicit zombie(int postion): character(270), timer(std::chrono::microseconds(time_num)){
+    explicit zombie(int postion): character(200), timer(std::chrono::microseconds(time_num)){
 
         zombieAnimationStatus = wALK;
 
@@ -356,6 +370,48 @@ public:
         death_standing.push_back(image);
         loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDie\\ZombieDie (18).png");
         death_standing.push_back(image);
+
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\1.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\2.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\3.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\4.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\5.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\6.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\7.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\8.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\9.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\10.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\11.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\12.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\13.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\14.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\15.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\16.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\17.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\18.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\19.png");
+        ashes.push_back(image);
+        loadimage(&image,"..\\resourse\\character\\zombie\\zm_dead\\ZombieDust\\20.png");
+        ashes.push_back(image);
+
     }
 };
 

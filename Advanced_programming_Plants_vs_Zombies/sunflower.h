@@ -10,7 +10,7 @@
 class sunflower : public plant{
 private:
     int num_of_sunshine = 25;
-    int make_sunflower_time = 200;
+    int make_sunflower_time = 150;
     int now_make_time = 0;
     Timer timer1;
 public:

@@ -30,7 +30,7 @@ public:
         putimagewithTransparent(x_position,y_position,&normal);
         timer.get_delay();
         if(timer.can_change_content()){
-            x_position+=10;
+            x_position+=20;
         }
     }
     void display_explode(){
