@@ -23,8 +23,34 @@ public:
         loadimage(&toolbar_image,"../resourse/game/toolbar.png");
         plant_list.push_back(new sunflower(1));
         plant_list.push_back(new peashooter(2));
-        plant_list.push_back(new wallnut(3));
-        plant_list.push_back(new pepper(4));
+
+        bool have_wallnut;
+        fstream file("../store/wallnut.txt",ios::in|ios::out);
+        if(!file){
+            cout << "open file failed." << endl;
+            exit(-1);
+        }
+        file >> have_wallnut;
+        file.close();
+
+        bool have_pepper;
+        fstream file1("../store/pepper.txt",ios::in|ios::out);
+        if(!file1){
+            cout << "open file failed." << endl;
+            exit(-1);
+        }
+        file1 >> have_pepper;
+        file.close();
+
+
+        int i = 3;
+        if(have_pepper){
+            plant_list.push_back(new pepper(i++));
+        }
+        if(have_wallnut){
+            plant_list.push_back(new wallnut(i));
+        }
+
     }
 
     ~Toolbar(){

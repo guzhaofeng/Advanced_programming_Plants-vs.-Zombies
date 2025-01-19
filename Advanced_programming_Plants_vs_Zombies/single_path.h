@@ -23,11 +23,20 @@ public:
     Timer timer;
     int sunshine_make_time = 300 + rand()%600;
     int now_shine_time = 100;
+
+    int attack;
 public:
     single_path(int path_num,bool is_day_not_night,bool is_land):path_num(path_num),is_day_not_night(is_day_not_night),is_land(is_land),timer(std::chrono::microseconds(time_num)){
         for (int i = 0; i < 10; ++i) {
             plant_queue.push_back(nullptr);
         }
+
+        fstream file("../store/attack.txt");
+        if(!file){
+            exit(-1);
+        }
+        file >> attack;
+
 
         mciSendString("open ../resourse/game/cardLift.mp3 alias cardLift", nullptr,0,nullptr);
     }
@@ -102,7 +111,7 @@ public:
                         delete temp;
                         break;
                     }else if(temp->die_time == 5){
-                        temp_zombie->set_health(25);
+                        temp_zombie->set_health(attack);
                         temp->die_time--;
                     }
                 }else{

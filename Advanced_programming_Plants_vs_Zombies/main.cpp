@@ -12,6 +12,8 @@
 #include "sunday_game.h"
 #include "sunwaterday.h"
 #include "game_over_sence.h"
+#include "level3.h"
+#include "level4.h"
 
 #include "character.h"
 #include "zombie.h"
@@ -57,6 +59,9 @@ int main() {
     cout << "you have " << money << " money" << endl;
     file1.close();
 
+    mciSendString("open ../resourse/game_win/winmusic.mp3 alias winmusic", nullptr,0,nullptr);
+
+
     bool running = true;
     while(running){
 
@@ -91,11 +96,19 @@ int main() {
             main_sence = new game_over_sence;
             delete sence_will_be_delete;
         }else if(status == change_to_game_win){
+            mciSendString("seek winmusic to 0", nullptr,0,nullptr);
+            mciSendString("play winmusic", nullptr,0,nullptr);
+
             if(last_status == change_to_sunday_game && level == 1){
                 level++;
             }else if(last_status == change_to_sunwaterday_game && level == 2){
                 level++;
+            }else if(last_status == change_to_level3 && level == 3){
+                level++;
+            }else if(last_status == change_to_level4 && level == 4){
+                level++;
             }
+
             money += level*10;
 
             fstream file2("../money.txt",ios::in|ios::out);
@@ -115,6 +128,20 @@ int main() {
 
             sence* sence_will_be_delete = main_sence;
             main_sence = new choose_game;
+            delete sence_will_be_delete;
+        }else if(status == change_to_level3){
+
+            last_status = change_to_level3;
+
+            sence* sence_will_be_delete = main_sence;
+            main_sence = new level3;
+            delete sence_will_be_delete;
+        }else if(status == change_to_level4){
+
+            last_status = change_to_level4;
+
+            sence* sence_will_be_delete = main_sence;
+            main_sence = new level4;
             delete sence_will_be_delete;
         }
 

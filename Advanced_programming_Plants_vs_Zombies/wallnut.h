@@ -32,7 +32,10 @@ public:
         "..\\resourse\\character\\plants\\wallnut\\full15.png",
         "..\\resourse\\character\\plants\\wallnut\\full16.png"
     },idx,50){
-        health = 1200;
+
+        ifstream file1("../store/wallnut_health.txt",ios::in);
+        file1 >> health;
+        file1.close();
 
         IMAGE image;
 

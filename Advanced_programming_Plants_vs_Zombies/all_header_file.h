@@ -27,6 +27,8 @@ enum Status{
     change_to_choose_game,
     change_to_sunwaterday_game,
     change_to_sunday_game,
+    change_to_level3,
+    change_to_level4,
     change_to_game_over,
     change_to_game_win,
 
